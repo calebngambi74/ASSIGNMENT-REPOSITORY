@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .page-header {
+        background: linear-gradient(135deg, #0036e9ff 0%, #00f2fe 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .page-header .material-icons {
+        font-size: 48px;
+    }
+    
+    .page-header h2 {
+        margin: 0;
+        font-size: 32px;
+    }
+    
+    .search-card {
+        background: white;
+        border-radius: 10px;
+        padding: 40px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        max-width: 600px;
+        margin: 0 auto 30px;
+    }
+    
+    .search-form {
+        display: flex;
+        gap: 15px;
+        align-items: flex-end;
+    }
+    
+    .search-input-group {
+        flex: 1;
+    }
+    
+    .search-input-group label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+        font-size: 14px;
+    }
+    
+    .search-input-group input {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: all 0.3s;
+    }
+    
+    .search-input-group input:focus {
+        outline: none;
+        border-color: #000fddff;
+        box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+    }
+    
+    .btn-search {
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #4facfe 0%, #2600feff 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+    }
+    
+    .btn-search:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
+    }
+    
+    .result-card {
+        background: white;
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .result-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #f0f0f0;
+    }
+    
+    .result-header h3 {
+        margin: 0;
+        color: #333;
+        font-size: 24px;
+    }
+    
+    .result-header .material-icons {
+        color: #4facfe;
+        font-size: 32px;
+    }
+    
+    .detail-row {
+        display: flex;
+        padding: 15px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+    
+    .detail-label {
+        flex: 0 0 150px;
+        font-weight: 600;
+        color: #666;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .detail-label .material-icons {
+        font-size: 20px;
+        color: #4facfe;
+    }
+    
+    .detail-value {
+        flex: 1;
+        color: #333;
+        font-size: 16px;
+    }
+    
+    .result-actions {
+        margin-top: 25px;
+        display: flex;
+        gap: 15px;
+    }
+    
+    .btn-action {
+        flex: 1;
+        padding: 12px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all 0.3s;
+    }
+    
+    .btn-action.edit {
+        background: #4facfe;
+        color: white;
+    }
+    
+    .btn-action.edit:hover {
+        background: #3a9ae0;
+        transform: translateY(-2px);
+    }
+    
+    .btn-action.back {
+        background: #f5f5f5;
+        color: #666;
+    }
+    
+    .btn-action.back:hover {
+        background: #e0e0e0;
+    }
+    
+    .input-icon {
+        color: #4facfe;
+    }
+</style>
+
+<div class="page-header">
+    <span class="material-icons">search</span>
+    <div>
+        <h2>Search Student</h2>
+        <p style="margin: 5px 0 0 0; opacity: 0.9; font-size: 14px;">Find student records by ID</p>
+    </div>
+</div>
+
+<div class="search-card">
+    <form method="POST" class="search-form">
+        <div class="search-input-group">
+            <label>
+                <span class="material-icons input-icon">badge</span>
+                Student ID
+            </label>
+            <input type="text" name="student_id" placeholder="Enter student ID to search" required autofocus>
+        </div>
+        <button type="submit" class="btn-search">
+            <span class="material-icons">search</span>
+            Search
+        </button>
+    </form>
+</div>
+
+{% if student %}
+<div class="result-card">
+    <div class="result-header">
+        <span class="material-icons">account_circle</span>
+        <h3>Student Details</h3>
+    </div>
+    
+    <div class="detail-row">
+        <div class="detail-label">
+            <span class="material-icons">badge</span>
+            Student ID
+        </div>
+        <div class="detail-value">{{ student.student_id }}</div>
+    </div>
+    
+    <div class="detail-row">
+        <div class="detail-label">
+            <span class="material-icons">person</span>
+            Name
+        </div>
+        <div class="detail-value">{{ student.name }}</div>
+    </div>
+    
+    <div class="detail-row">
+        <div class="detail-label">
+            <span class="material-icons">school</span>
+            Program
+        </div>
+        <div class="detail-value">{{ student.program }}</div>
+    </div>
+    
+    <div class="detail-row">
+        <div class="detail-label">
+            <span class="material-icons">calendar_today</span>
+            Year Level
+        </div>
+        <div class="detail-value">Year {{ student.year }}</div>
+    </div>
+    
+    <div class="result-actions">
+        <a href="/update/{{ student.student_id }}" class="btn-action edit">
+            <span class="material-icons">edit</span>
+            Update Student
+        </a>
+        <a href="/search" class="btn-action back">
+            <span class="material-icons">search</span>
+            New Search
+        </a>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

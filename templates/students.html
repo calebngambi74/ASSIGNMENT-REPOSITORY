@@ -1,0 +1,331 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .page-header {
+        background: linear-gradient(135deg, #006fcfff 0%, #00f2fe 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .header-left {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .page-header .material-icons {
+        font-size: 48px;
+    }
+    
+    .page-header h2 {
+        margin: 0;
+        font-size: 32px;
+    }
+    
+    .page-header p {
+        margin: 5px 0 0 0;
+        opacity: 0.9;
+        font-size: 14px;
+    }
+    
+    .header-actions {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .btn-header {
+        padding: 10px 20px;
+        background: white;
+        color: #0400ecff;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s;
+    }
+    
+    .btn-header:hover {
+        background: #f0f0f0;
+        transform: translateY(-2px);
+    }
+    
+    .students-section {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .section-header {
+        background: #f8f9fa;
+        padding: 20px;
+        border-bottom: 2px solid #e9ecef;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .section-header h3 {
+        margin: 0;
+        color: #333;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .student-count {
+        background: #1b9e01ff;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+    
+    .table-container {
+        overflow-x: auto;
+    }
+    
+    table {
+        width: 100%;
+        margin: 0;
+    }
+    
+    th {
+        background: #343a40;
+        color: white;
+        padding: 15px;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+    
+    td {
+        padding: 15px;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    tr:last-child td {
+        border-bottom: none;
+    }
+    
+    tr:hover {
+        background: #f8f9fa;
+    }
+    
+    .student-id {
+        font-weight: bold;
+        color: #4facfe;
+        font-size: 15px;
+    }
+    
+    .student-name {
+        font-weight: 600;
+        color: #333;
+        font-size: 15px;
+    }
+    
+    .student-program {
+        color: #666;
+    }
+    
+    .badge {
+        display: inline-block;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+    
+    .badge.year-1 { background: #e3f2fd; color: #1976d2; }
+    .badge.year-2 { background: #f3e5f5; color: #7b1fa2; }
+    .badge.year-3 { background: #e8f5e9; color: #388e3c; }
+    .badge.year-4 { background: #fff3e0; color: #f57c00; }
+    
+    .action-btns {
+        display: flex;
+        gap: 8px;
+    }
+    
+    .btn-small {
+        padding: 8px 14px;
+        font-size: 13px;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    .btn-small .material-icons {
+        font-size: 16px;
+    }
+    
+    .btn-small.view {
+        background: #17a2b8;
+        color: white;
+    }
+    
+    .btn-small.view:hover {
+        background: #138496;
+    }
+    
+    .btn-small.edit {
+        background: #4facfe;
+        color: white;
+    }
+    
+    .btn-small.edit:hover {
+        background: #3a9ae0;
+    }
+    
+    .btn-small.delete {
+        background: #dc3545;
+        color: white;
+    }
+    
+    .btn-small.delete:hover {
+        background: #c82333;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 80px 20px;
+        color: #6c757d;
+    }
+    
+    .empty-state .material-icons {
+        font-size: 100px;
+        opacity: 0.2;
+        margin-bottom: 20px;
+    }
+    
+    .empty-state h3 {
+        margin-bottom: 10px;
+        color: #495057;
+        font-size: 24px;
+    }
+    
+    .empty-state p {
+        margin-bottom: 25px;
+        font-size: 16px;
+    }
+    
+    .btn-add {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+    
+    .btn-add:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(79, 172, 254, 0.4);
+    }
+</style>
+
+<div class="page-header">
+    <div class="header-left">
+        <span class="material-icons">groups</span>
+        <div>
+            <h2>All Students</h2>
+            <p>Complete list of registered students</p>
+        </div>
+    </div>
+    <div class="header-actions">
+        <a href="/add" class="btn-header">
+            <span class="material-icons">person_add</span>
+            Add Student
+        </a>
+        <a href="/search" class="btn-header">
+            <span class="material-icons">search</span>
+            Search
+        </a>
+    </div>
+</div>
+
+<div class="students-section">
+    <div class="section-header">
+        <h3>
+            <span class="material-icons">list</span>
+            Student Records
+        </h3>
+        <span class="student-count">{{ students|length }} Students</span>
+    </div>
+    
+    {% if students %}
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th><span class="material-icons" style="font-size: 16px; vertical-align: middle;">badge</span> Student ID</th>
+                    <th><span class="material-icons" style="font-size: 16px; vertical-align: middle;">person</span> Name</th>
+                    <th><span class="material-icons" style="font-size: 16px; vertical-align: middle;">school</span> Program</th>
+                    <th><span class="material-icons" style="font-size: 16px; vertical-align: middle;">calendar_today</span> Year Level</th>
+                    <th><span class="material-icons" style="font-size: 16px; vertical-align: middle;">settings</span> Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td><span class="student-id">{{ student.student_id }}</span></td>
+                    <td><span class="student-name">{{ student.name }}</span></td>
+                    <td><span class="student-program">{{ student.program }}</span></td>
+                    <td>
+                        <span class="badge year-{{ student.year }}">
+                            Year {{ student.year }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            <a href="/student/{{ student.student_id }}" class="btn-small view">
+                                <span class="material-icons">visibility</span>
+                                View
+                            </a>
+                            <a href="/update/{{ student.student_id }}" class="btn-small edit">
+                                <span class="material-icons">edit</span>
+                                Edit
+                            </a>
+                            <a href="/delete/{{ student.student_id }}" class="btn-small delete" onclick="return confirm('Are you sure you want to delete this student?')">
+                                <span class="material-icons">delete</span>
+                                Delete
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <span class="material-icons">inbox</span>
+        <h3>No Students Found</h3>
+        <p>Start by adding your first student to the system</p>
+        <a href="/add" class="btn-add">
+            <span class="material-icons">person_add</span>
+            Add Student
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

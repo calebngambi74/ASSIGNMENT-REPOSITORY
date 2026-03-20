@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Record Management System</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', Arial, sans-serif; background: #f4f4f4; padding: 20px; transition: background 0.3s, color 0.3s; }
+        .material-icons { vertical-align: middle; margin-right: 5px; }
+        
+        /* Dark mode styles */
+        body.dark-mode {
+            background: #1a1a2e;
+            color: #eee;
+        }
+        
+        body.dark-mode .container {
+            background: #16213e;
+            color: #eee;
+        }
+        
+        body.dark-mode nav {
+            background: #0f3460;
+        }
+        
+        body.dark-mode h1 {
+            color: #eee;
+        }
+        
+        body.dark-mode .flash.success {
+            background: #1e4620;
+            color: #a3d9a5;
+            border-color: #2d5f2e;
+        }
+        
+        body.dark-mode .flash.error {
+            background: #4a1c1c;
+            color: #f5a3a3;
+            border-color: #6b2929;
+        }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #333; margin-bottom: 20px; }
+        nav { background: #e00000ff; padding: 10px; border-radius: 4px; margin-bottom: 20px; display: flex; align-items: center; }
+        nav a { color: white; text-decoration: none; padding: 8px 15px; margin-right: 10px; display: inline-flex; align-items: center; gap: 5px; }
+        nav a:hover { background: #630000ff; border-radius: 4px; }
+        
+        .theme-toggle {
+            margin-left: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s;
+        }
+        
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .theme-toggle .material-icons {
+            margin-right: 0;
+        }
+        .flash { padding: 10px; margin-bottom: 20px; border-radius: 4px; }
+        .flash.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .flash.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #007bff; color: white; }
+        tr:hover { background: #f5f5f5; }
+        .btn { padding: 8px 15px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; }
+        .btn:hover { background: #0056b3; }
+        .btn-danger { background: #dc3545; }
+        .btn-danger:hover { background: #c82333; }
+        .btn-success { background: #28a745; }
+        .btn-success:hover { background: #218838; }
+        form { margin-top: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, select { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span class="material-icons" style="font-size: 32px; vertical-align: middle;">school</span> Student Record Management System</h1>
+        <nav>
+            <a href="/"><span class="material-icons">dashboard</span>Dashboard</a>
+            <a href="/students"><span class="material-icons">groups</span>Students</a>
+            <a href="/add"><span class="material-icons">person_add</span>Add Student</a>
+            <a href="/search"><span class="material-icons">search</span>Search</a>
+            <a href="/queue"><span class="material-icons">queue</span>Queue</a>
+            {% if session.username %}
+            <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">
+                <span class="material-icons" id="themeIcon">dark_mode</span>
+            </button>
+            <a href="/profile"><span class="material-icons">account_circle</span>Profile</a>
+            <a href="/logout"><span class="material-icons">logout</span>Logout</a>
+            {% endif %}
+        </nav>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </div>
+    
+    <script>
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('themeIcon').textContent = 'light_mode';
+        }
+        
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+            
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                themeIcon.textContent = 'light_mode';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeIcon.textContent = 'dark_mode';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+    </script>
+</body>
+</html>
